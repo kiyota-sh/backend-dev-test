@@ -16,4 +16,5 @@ public class Product {
     public Long getId() { return id; }
     public String getName() { return name; }
     public int getStock() { return stock; }
+    public Long getBranchId() { return branchId; }
 }
