@@ -1,10 +1,13 @@
 package com.company.franchise.infrastructure.persistence;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "branches")
 public class BranchEntity {
     @Id
