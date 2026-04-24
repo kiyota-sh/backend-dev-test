@@ -1,8 +1,11 @@
 package com.company.franchise.infrastructure.persistence;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "products")
 public class ProductEntity {
     @Id
@@ -11,6 +14,7 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private String name;
+    private int stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
