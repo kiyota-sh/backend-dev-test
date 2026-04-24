@@ -9,4 +9,5 @@ public interface ProductRepositoryPort {
     void delete(Long id);
     Product updateStock(Long id, int stock);
     List<Product> findTopProductsByFranchise(Long franchiseId);
+    Product updateName(Long id, String name);
 }
