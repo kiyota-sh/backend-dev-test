@@ -58,4 +58,16 @@ class BranchControllerTest extends BaseIntegrationTest {
                     """))
             .andExpect(status().isNotFound());
     }
+
+    @Test
+    void shouldUpdateBranchName() throws Exception {
+        Long fId = createFranchise("Nike");
+        Long bId = createBranch("Main", fId);
+
+        mockMvc.perform(put("/branches/%d/name".formatted(bId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Central\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Central"));
+    }
 }

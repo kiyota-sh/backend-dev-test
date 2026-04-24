@@ -83,12 +83,28 @@ class ProductControllerTest extends BaseIntegrationTest {
         Long b2 = createBranch("Store2", fId);
 
         createProduct("A", 10, b1);
-        createProduct("B", 50, b1);
+        createProduct("B", 50, b1); // top
+
         createProduct("C", 5, b2);
-        createProduct("D", 80, b2);
+        createProduct("D", 80, b2); // top
 
         mockMvc.perform(get("/products/top-stock/%d".formatted(fId)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(2));
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].name").value("B"))
+            .andExpect(jsonPath("$[1].name").value("D"));
+    }
+
+    @Test
+    void shouldUpdateProductName() throws Exception {
+        Long fId = createFranchise("Nike");
+        Long bId = createBranch("Main", fId);
+        Long pId = createProduct("Shoes", 100, bId);
+
+        mockMvc.perform(put("/products/%d/name".formatted(pId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Sneakers\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Sneakers"));
     }
 }
