@@ -1,5 +1,6 @@
 package com.company.franchise.infrastructure.persistence.adapter;
 
+import com.company.franchise.domain.exception.NotFoundException;
 import com.company.franchise.domain.model.Branch;
 import com.company.franchise.domain.ports.out.BranchRepositoryPort;
 import com.company.franchise.infrastructure.persistence.BranchEntity;
@@ -21,9 +22,8 @@ public class BranchRepositoryAdapter implements BranchRepositoryPort {
 
     @Override
     public Branch save(Long franchiseId, Branch branch) {
-
         FranchiseEntity franchise = franchiseRepo.findById(franchiseId)
-                .orElseThrow();
+            .orElseThrow(() -> new NotFoundException("Franchise not found"));
 
         BranchEntity entity = new BranchEntity();
         entity.setName(branch.getName());

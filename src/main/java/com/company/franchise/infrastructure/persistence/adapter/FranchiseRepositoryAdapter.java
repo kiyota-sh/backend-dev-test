@@ -1,5 +1,6 @@
 package com.company.franchise.infrastructure.persistence.adapter;
 
+import com.company.franchise.domain.exception.NotFoundException;
 import com.company.franchise.domain.model.Franchise;
 import com.company.franchise.domain.ports.out.FranchiseRepositoryPort;
 import com.company.franchise.infrastructure.persistence.FranchiseEntity;
@@ -23,9 +24,8 @@ public class FranchiseRepositoryAdapter implements FranchiseRepositoryPort {
 
     @Override
     public Franchise updateName(Long id, String name) {
-
         FranchiseEntity entity = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Franchise not found"));
+                .orElseThrow(() -> new NotFoundException("Franchise not found"));
 
         entity.setName(name);
 
@@ -35,7 +35,7 @@ public class FranchiseRepositoryAdapter implements FranchiseRepositoryPort {
     @Override
     public Franchise findById(Long id) {
         FranchiseEntity entity = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Franchise not found"));
+                .orElseThrow(() -> new NotFoundException("Franchise not found"));
 
         return FranchiseMapper.toDomain(entity);
     }

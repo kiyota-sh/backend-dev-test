@@ -1,5 +1,6 @@
 package com.company.franchise.infrastructure.persistence.adapter;
 
+import com.company.franchise.domain.exception.NotFoundException;
 import com.company.franchise.domain.model.Product;
 import com.company.franchise.domain.ports.out.ProductRepositoryPort;
 import com.company.franchise.infrastructure.persistence.BranchEntity;
@@ -25,7 +26,7 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
     @Override
     public Product save(Long branchId, Product product) {
         BranchEntity branch = branchRepo.findById(branchId)
-                .orElseThrow();
+            .orElseThrow(() -> new NotFoundException(("Product no found")));
 
         ProductEntity entity = new ProductEntity();
         entity.setName(product.getName());
@@ -44,7 +45,9 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
     @Override
     public Product updateStock(Long id, int stock) {
-        ProductEntity entity = productRepo.findById(id).orElseThrow();
+        ProductEntity entity = productRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException("Product not found"));
+
         entity.setStock(stock);
         ProductEntity saved = productRepo.save(entity);
 
@@ -53,6 +56,9 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
     @Override
     public List<Product> findTopProductsByFranchise(Long franchiseId) {
-        return List.of();
+        List<ProductEntity> entities = productRepo.findTopProductsByFranchise(franchiseId);
+
+        return entities.stream()
+            .map(ProductMapper::toDomain).toList();
     }
 }
