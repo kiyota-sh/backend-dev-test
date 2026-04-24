@@ -33,4 +33,19 @@ public class BranchRepositoryAdapter implements BranchRepositoryPort {
 
         return new Branch(saved.getId(), saved.getName(), franchiseId, null);
     }
+
+    @Override
+    public Branch updateName(Long id, String name) {
+        BranchEntity entity = branchRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException("Branch not found"));
+
+        entity.setName(name);
+
+        return new Branch(
+            branchRepo.save(entity).getId(),
+            name,
+            entity.getFranchise().getId(),
+            null
+        );
+    }
 }

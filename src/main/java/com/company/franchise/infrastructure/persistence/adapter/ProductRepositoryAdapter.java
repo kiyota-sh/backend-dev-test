@@ -61,4 +61,14 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
         return entities.stream()
             .map(ProductMapper::toDomain).toList();
     }
+
+    @Override
+    public Product updateName(Long id, String name) {
+        ProductEntity entity = productRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException("Product not found"));
+
+        entity.setName(name);
+
+        return ProductMapper.toDomain(productRepo.save(entity));
+    }
 }

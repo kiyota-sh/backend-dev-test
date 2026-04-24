@@ -1,8 +1,11 @@
 package com.company.franchise.infrastructure.web.controller;
 
+import com.company.franchise.application.useCase.UpdateProductNameService;
+import com.company.franchise.domain.model.Branch;
 import com.company.franchise.domain.model.Product;
 import com.company.franchise.domain.ports.out.ProductRepositoryPort;
 import com.company.franchise.infrastructure.web.dto.CreateProductRequest;
+import com.company.franchise.infrastructure.web.dto.UpdateNameRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,9 +18,11 @@ import java.util.List;
 @Tag(name = "Products")
 public class ProductController {
     private final ProductRepositoryPort repository;
+    private final UpdateProductNameService updateProductNameService;
 
-    public ProductController(ProductRepositoryPort repository) {
+    public ProductController(ProductRepositoryPort repository, UpdateProductNameService updateProductNameService) {
         this.repository = repository;
+        this.updateProductNameService = updateProductNameService;
     }
 
     @Operation(summary = "Create product in branch")
@@ -44,5 +49,14 @@ public class ProductController {
     @GetMapping("/top-stock/{franchiseId}")
     public List<Product> topProducts(@PathVariable Long franchiseId) {
         return repository.findTopProductsByFranchise(franchiseId);
+    }
+
+    @Operation(summary = "Update product name")
+    @PutMapping("/{id}/name")
+    public Product updateName(
+        @Parameter(description = "Product ID") @PathVariable Long id,
+        @RequestBody UpdateNameRequest req
+    ) {
+        return updateProductNameService.execute(id, req.getName());
     }
 }
