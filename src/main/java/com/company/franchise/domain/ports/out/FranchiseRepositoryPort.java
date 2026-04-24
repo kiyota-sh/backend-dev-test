@@ -1,4 +1,4 @@
-package com.company.franchise.domain.ports;
+package com.company.franchise.domain.ports.out;
 
 import com.company.franchise.domain.model.Franchise;
 
